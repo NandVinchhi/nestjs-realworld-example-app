@@ -146,6 +146,8 @@ export class ArticleService {
     const user = await this.userRepository.findOneOrFail(userId, { populate: ['followers', 'favorites', 'articles'] });
     const article = new Article(user, dto.title, dto.description, dto.body);
     article.tagList.push(...dto.tagList);
+
+    article.tagList.sort();
     user.articles.add(article);
     await this.em.flush();
 
