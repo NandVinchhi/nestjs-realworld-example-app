@@ -141,8 +141,8 @@ export class ArticleService {
   }
 
   async findComments(slug: string): Promise<ICommentsRO> {
-    const article = await this.articleRepository.findOneOrFail({ slug }, { populate: ['comments'] });
-    return { comments: article.comments.getItems() };
+    const article = await this.articleRepository.findOneOrFail({ slug }, { populate: ['comments', 'comments.author'] });
+    return { comments: article.comments.getItems().map(comment => comment.toJSON()) };
   }
 
   async create(userId: number, dto: CreateArticleDto) {

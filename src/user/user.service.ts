@@ -58,6 +58,19 @@ export class UserService {
 
   async update(id: number, dto: UpdateUserDto) {
     const user = await this.userRepository.findOneOrFail(id);
+    
+    // If password is provided, hash it before updating
+    if (dto.password) {
+      dto = {
+        ...dto,
+        password: crypto.createHmac('sha256', dto.password).digest('hex'),
+      };
+    } else {
+      // Remove password from dto if not provided to prevent overwriting with undefined
+      const { password, ...dtoWithoutPassword } = dto;
+      dto = dtoWithoutPassword;
+    }
+    
     wrap(user).assign(dto);
     await this.em.flush();
 

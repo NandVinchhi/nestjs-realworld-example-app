@@ -1,4 +1,4 @@
-import { Entity, ManyToOne, PrimaryKey, Property } from '@mikro-orm/mysql';
+import { Entity, ManyToOne, PrimaryKey, Property, wrap } from '@mikro-orm/mysql';
 import { User } from '../user/user.entity';
 import { Article } from './article.entity';
 
@@ -29,4 +29,17 @@ export class Comment {
     this.body = body;
   }
 
+  toJSON(user?: User) {
+    const o = wrap<Comment>(this).toObject();
+    o.author = this.author.toJSON(user);
+    return o;
+  }
+}
+
+export interface CommentDTO {
+  id: number;
+  createdAt: Date;
+  updatedAt: Date;
+  body: string;
+  author: any;
 }

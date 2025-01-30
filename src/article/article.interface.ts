@@ -1,8 +1,7 @@
 import { ArticleDTO } from './article.entity';
+import { CommentDTO } from './comment.entity';
 
-interface IComment {
-  body: string;
-}
+interface IComment extends CommentDTO {}
 
 export interface ICommentsRO {
   comments: IComment[];
